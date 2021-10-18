@@ -1,0 +1,10 @@
+{
+    "name" : "Taskbar Calculator",
+    "description" : "Text-based calculator for the taskbar",
+    "shell-version" : [
+        "40"
+    ],
+    "url" : "",
+    "uuid" : "tbcalc@mgeck64.github.com",
+    "version" : 1.0
+}
