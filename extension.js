@@ -330,9 +330,6 @@ class Parser {
 // Calculator-------------------------------------------------------------------
 // (calculator ui object)
 
-const VISIBLE_ICON_NAME = 'dialog-question-symbolic';
-const NOT_VISIBLE_ICON_NAME = 'accessories-calculator-symbolic';
-
 const Calculator = new Lang.Class({
   Name: 'Calculator',
   Extends: PanelMenu.Button,
@@ -343,7 +340,7 @@ const Calculator = new Lang.Class({
 
     this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.tbcalc');
 
-    // expression Entry input field and help Icon button:
+    // taskbar expression entry input field:
 
     this._exprEntry = new St.Entry({
       hint_text: HINT_TEXT,
@@ -359,31 +356,20 @@ const Calculator = new Lang.Class({
       'visible',
       Gio.SettingsBindFlags.DEFAULT
     );
-    this._icon = new St.Icon({
-      icon_name: this._exprEntry.visible ? VISIBLE_ICON_NAME : NOT_VISIBLE_ICON_NAME,
-      style_class: 'system-status-icon'
-    });
-    this._settings.connect('changed', Lang.bind(this, this._settingsChanged));
-
-    // container for Entry and Icon elements:
-
-    this._calcBox = new St.BoxLayout();
-    this._calcBox.add(this._exprEntry);
-    this._calcBox.add(this._icon);
-    this.actor.add_actor(this._calcBox);
 
     // help popup:
+    // (will also have secondary expression entry input field)
 
-    const WIDTH = 375;
+    const MENU_ITEM_WIDTH = 400;
 
     this._exprEntry2 = new St.Entry({
       hint_text: 'Enter a mathematical expression',
       track_hover: true,
       can_focus: true,
-      width: WIDTH,
+      width: MENU_ITEM_WIDTH,
       style_class: 'expr-entry2'
     });
-    let helpItem = new PopupMenu.PopupBaseMenuItem({
+    const helpItem = new PopupMenu.PopupBaseMenuItem({
       reactive: false
     });
     helpItem.actor.add_actor(this._exprEntry2);
@@ -391,7 +377,7 @@ const Calculator = new Lang.Class({
 
     const helpText = new St.Label({
       text: this._helpContent(),
-      width: WIDTH,
+      width: MENU_ITEM_WIDTH,
       style_class: 'help-text'
     });
     this._helpTextItem = new PopupMenu.PopupBaseMenuItem({
@@ -406,6 +392,22 @@ const Calculator = new Lang.Class({
       'visible',
       Gio.SettingsBindFlags.DEFAULT
     );
+
+    // icon
+    // (do after settings bindings have been made)
+
+    this._icon = new St.Icon({
+      icon_name: this._iconName(),
+      style_class: 'system-status-icon'
+    });
+    this._settings.connect('changed', Lang.bind(this, this._settingsChanged));
+
+    // container for entry and icon elements:
+
+    this._calcBox = new St.BoxLayout();
+    this._calcBox.add(this._exprEntry);
+    this._calcBox.add(this._icon);
+    this.actor.add_actor(this._calcBox);
 
     // events:
 
@@ -458,14 +460,21 @@ const Calculator = new Lang.Class({
     actor.set_selection(0, result.length);
   },
 
+  _iconName () {
+    if (this._exprEntry.visible && this._helpTextItem.visible) {
+      return 'dialog-question-symbolic';
+    }
+    return 'accessories-calculator-symbolic';
+  },
+
   _settingsChanged () {
-    this._icon.icon_name = this._exprEntry.visible ? VISIBLE_ICON_NAME : NOT_VISIBLE_ICON_NAME;
+    this._icon.icon_name = this._iconName();
   },
 
   _helpContent () {
     return '\
-Expression example: 2+4*8, which means multiply 4 by 8\n\
-and add 2 to the result. Supported operators:\n\
+An example of an expression is 2+4*8, which means multiply\n\
+4 by 8 and add 2 to the result. Supported operators:\n\
     + addition\n\
     - subtraction and negation\n\
     * multiplication\n\
