@@ -341,6 +341,8 @@ const Calculator = new Lang.Class({
     this.parent(0.0, 'Calculator', false);
     const HINT_TEXT = 'Enter math expression';
 
+    this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.tbcalc');
+
     // expression Entry input field and help Icon button:
 
     this._exprEntry = new St.Entry({
@@ -351,7 +353,6 @@ const Calculator = new Lang.Class({
       style_class: 'expr-entry'
     });
 
-    this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.tbcalc');
     this._settings.bind(
       'allow-entry-on-taskbar',
       this._exprEntry,
@@ -393,11 +394,18 @@ const Calculator = new Lang.Class({
       width: WIDTH,
       style_class: 'help-text'
     });
-    helpItem = new PopupMenu.PopupBaseMenuItem({
+    this._helpTextItem = new PopupMenu.PopupBaseMenuItem({
       reactive: false
     });
-    helpItem.actor.add_actor(helpText);
-    this.menu.addMenuItem(helpItem);
+    this._helpTextItem.actor.add_actor(helpText);
+    this.menu.addMenuItem(this._helpTextItem);
+
+    this._settings.bind(
+      'show-help-on-popup',
+      this._helpTextItem,
+      'visible',
+      Gio.SettingsBindFlags.DEFAULT
+    );
 
     // events:
 
@@ -467,8 +475,10 @@ and add 2 to the result. Supported operators:\n\
 Use parentheses to override operator precedence; e.g.,\n\
 (2+4)*8 means add 2 to 4 and multiply the result by 8.\n\
 \n\
-The constants pi and e are available. Also available are\n\
-the following math functions:\n\
+The following special values and functions are available:\n\
+    pi : Did you know that March 14 is Pi day?\n\
+    e : Euler\'s number\n\
+    last : the last calculated value\n\
     abs(x) : absolute value of x\n\
     acos(x) : arccosine of x, in radians\n\
     acosh(x) : hyperbolic arccosine of x\n\

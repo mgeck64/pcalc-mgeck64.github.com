@@ -5,5 +5,8 @@
     <key name="allow-entry-on-taskbar" type="b">
       <default>true</default>
     </key>
+    <key name="show-help-on-popup" type="b">
+      <default>true</default>
+    </key>
   </schema>
 </schemalist>
