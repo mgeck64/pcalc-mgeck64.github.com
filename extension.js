@@ -373,6 +373,14 @@ const Calculator = new Lang.Class({
       'visible',
       Gio.SettingsBindFlags.DEFAULT
     );
+
+
+    const menuItem = new PopupMenu.PopupBaseMenuItem({
+      reactive: false
+    });
+//    this._exprEntry.menu.addMenuItem(menuItem);
+
+
   },
 
   _initPopup () { // popup will have secondary expression entry field and help content
@@ -512,7 +520,7 @@ The following special values and functions are available:\n\
     cosh(x) : hyperbolic cosine of x\n\
     exp(x) : value of e raised to the power of x\n\
     floor(x) : x rounded downwards to the nearest integer\n\
-    log(x) : natural logarithm (base e) of x\n\
+    ln(x) or log(x) : natural logarithm (base e) of x\n\
     random() : random number between 0 and 1\n\
     round(x) : rounds x to the nearest integer\n\
     sin(x) : sine of x (x is in radians)\n\
