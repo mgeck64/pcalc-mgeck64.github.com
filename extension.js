@@ -494,7 +494,7 @@ An example of an expression is 2+4*8, which means multiply\n\
     - subtraction and negation\n\
     * multiplication\n\
     / division\n\
-    ^ or ** exponentation (right-associative)\n\
+    ^ or ** exponentiation (right-associative)\n\
 \n\
 Use parentheses to override operator precedence; e.g.,\n\
 (2+4)*8 means add 2 to 4 and multiply the result by 8.\n\
