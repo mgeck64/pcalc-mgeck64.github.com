@@ -55,4 +55,4 @@ The following special values and functions are available:\
 &nbsp;&nbsp;&nbsp;&nbsp;tanh(x) : hyperbolic tangent of a number\
 &nbsp;&nbsp;&nbsp;&nbsp;trunc(x) : integer part of a number x\
 &nbsp;&nbsp;&nbsp;&nbsp;tanh(x) : hyperbolic tangent of a number\
-&nbsp;&nbsp;&nbsp;&nbsp;trunc(x) : integer part of a number x';
+&nbsp;&nbsp;&nbsp;&nbsp;trunc(x) : integer part of a number x
