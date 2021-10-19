@@ -336,14 +336,31 @@ const Calculator = new Lang.Class({
 
   _init () {
     this.parent(0.0, 'Calculator', false);
-    const HINT_TEXT = 'Enter math expression';
-
     this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.tbcalc');
 
-    // taskbar expression entry input field:
+    // taskbar expression entry field
+    this._initEntry();
 
+    // popup; will have secondary expression entry field and help content
+    this._initPopup();
+
+    // taskbar icon
+    // (do after settings bindings have been made)
+    this._initIcon();
+
+    // container for entry and icon elements
+    this._initContainer();
+
+    // events
+    this._initEvents();
+
+    // parser
+    this._parser = new Parser();
+  },
+
+  _initEntry () { // taskbar expression entry field
     this._exprEntry = new St.Entry({
-      hint_text: HINT_TEXT,
+      hint_text: 'Enter math expression',
       track_hover: true,
       can_focus: true,
       y_align: Clutter.ActorAlign.CENTER,
@@ -356,10 +373,9 @@ const Calculator = new Lang.Class({
       'visible',
       Gio.SettingsBindFlags.DEFAULT
     );
+  },
 
-    // help popup:
-    // (will also have secondary expression entry input field)
-
+  _initPopup () { // popup will have secondary expression entry field and help content
     const MENU_ITEM_WIDTH = 400;
 
     this._exprEntry2 = new St.Entry({
@@ -392,25 +408,24 @@ const Calculator = new Lang.Class({
       'visible',
       Gio.SettingsBindFlags.DEFAULT
     );
+  },
 
-    // icon
-    // (do after settings bindings have been made)
-
+  _initIcon () { // taskbar icon
     this._icon = new St.Icon({
       icon_name: this._iconName(),
       style_class: 'system-status-icon'
     });
     this._settings.connect('changed', Lang.bind(this, this._settingsChanged));
+  },
 
-    // container for entry and icon elements:
-
+  _initContainer () { // container for entry and icon elements
     this._calcBox = new St.BoxLayout();
     this._calcBox.add(this._exprEntry);
     this._calcBox.add(this._icon);
     this.actor.add_actor(this._calcBox);
+  },
 
-    // events:
-
+  _initEvents () { // events:
     this.connect('button_press_event', Lang.bind(this, function (actor, event) {
       this._exprEntry2.grab_key_focus();
     }));
@@ -422,10 +437,6 @@ const Calculator = new Lang.Class({
     this._exprEntry2.clutter_text.connect('key_focus_in', Lang.bind(this, this._on_key_focus_in));
     this._exprEntry2.clutter_text.connect('button-release-event', Lang.bind(this, this._on_button_release));
     this._exprEntry2.clutter_text.connect('activate', Lang.bind(this, this._on_activate));
-
-    // parser:
-
-    this._parser = new Parser();
   },
 
   _on_key_focus_in (actor, event) {
