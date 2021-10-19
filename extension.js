@@ -9,15 +9,15 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Mainloop = imports.mainloop;
 
 // Lexer------------------------------------------------------------------------
-// (breaks up input expression into chunks (tokens), which serves as input to
-// the parser)
+// scans an expression string as a sequence of "tokens", which serves as input
+// to the parser
 
-const TOK_UNDEF = 0; const TOK_END = 1; const TOK_NUM = 2; const TOK_ADD = 3;
+const TOK_UNKNOWN = 0; const TOK_END = 1; const TOK_NUM = 2; const TOK_ADD = 3;
 const TOK_SUB = 4; const TOK_MUL = 5; const TOK_DIV = 6; const TOK_EXP = 7;
 const TOK_LPAREN = 8; const TOK_RPAREN = 9; const TOK_IDENT = 10;
 
 class Lexer {
-  constructor (expr) {
+  constructor (expr) { // expr: expression string
     this._expr = expr;
     this._idx = 0;
     this._exprLen = expr.length;
@@ -58,6 +58,7 @@ class Lexer {
     this._tryNumber();
     if (idxStart !== this._idx) {
       return { id: TOK_NUM, val: +this._expr.substring(idxStart, this._idx) };
+      // note + in front of substring, which converts string to number
     }
 
     // test for identifier
@@ -66,7 +67,7 @@ class Lexer {
       return { id: TOK_IDENT, val: this._expr.substring(idxStart, this._idx) };
     }
 
-    let id = TOK_UNDEF;
+    let id = TOK_UNKNOWN;
     switch (this._expr[idxStart]) {
       case '+':
         id = TOK_ADD; break;
@@ -121,9 +122,10 @@ class Lexer {
         if (idx3 !== this._exprLen && /[+-]/.test(this._expr[idx3])) {
           ++idx3;
         }
-        if (idx3 !== this._exprLen && /[0-9]/.test(this._expr[idx3])) {
+        let digitRegEx = /[0-9]/;
+        if (idx3 !== this._exprLen && digitRegEx.test(this._expr[idx3])) {
           ++idx3;
-          while (/[0-9]/.test(this._expr[idx3])) {
+          while (digitRegEx.test(this._expr[idx3])) {
             ++idx3;
           }
           idx2 = idx3;
@@ -148,13 +150,13 @@ class Lexer {
 }
 
 // Parser-----------------------------------------------------------------------
-// (evaluates an expression)
+// evaluates expressions
 
 class NoExpression {} // exception
 
 class UndefinedIdent { // exception
   constructor (ident) {
-    this.ident = ident;
+    this.ident = ident; // identifier string
   }
 }
 
@@ -168,16 +170,16 @@ class Parser {
     if (this._lexer.peekToken().id === TOK_END) {
       throw new NoExpression();
     }
-    const val = this._additiveExpr();
+    const val = this._expression();
     if (this._lexer.peekToken().id !== TOK_END) {
-      throw SyntaxError();
+      throw new SyntaxError();
     }
     this._last_val = val;
     return val;
   }
 
-  _additiveExpr () {
-    // <additiveExpr> ::= <multiplicitiveExpr> [ ( "+" | "-" ) <multiplicitiveExpr> ]...
+  _expression () {
+    // <_expression> ::= <_multiplicitiveExpr> [ ( "+" | "-" ) <_multiplicitiveExpr> ]...
     let lhs = this._multiplicitiveExpr();
     for (;;) {
       if (this._lexer.peekToken().id === TOK_ADD) {
@@ -194,7 +196,7 @@ class Parser {
   }
 
   _multiplicitiveExpr () {
-    // <multiplicitiveExpr> ::= <exponentialExpr> [ ( "*" | "/" ) <exponentialExpr> ]...
+    // <_multiplicitiveExpr> ::= <_exponentialExpr> [ ( "*" | "/" ) <_exponentialExpr> ]...
     let lhs = this._exponentialExpr();
     for (;;) {
       if (this._lexer.peekToken().id === TOK_MUL) {
@@ -211,12 +213,12 @@ class Parser {
   }
 
   _exponentialExpr () {
-    // <exponentialExpr> ::= ( "+" | "-" ) <exponentialExpr>
-    //                     | <base> [ ( "**" | "^" ) <exponentialExpr> ]
-    // exponentation is right-associative
+    // <_exponentialExpr> ::= ( "+" | "-" ) <_exponentialExpr>
+    //                      | <_baseExpr> [ ( "**" | "^" ) <_exponentialExpr> ]
+    // note: exponentation is right-associative
     if (this._lexer.peekToken().id === TOK_ADD) {
       this._lexer.getToken();
-      return +this._exponentialExpr(); // basically does nothing
+      return +this._exponentialExpr();
     }
 
     if (this._lexer.peekToken().id === TOK_SUB) {
@@ -224,7 +226,7 @@ class Parser {
       return -this._exponentialExpr();
     }
 
-    let lhs = this._base();
+    let lhs = this._baseExpr();
     if (this._lexer.peekToken().id === TOK_EXP) {
       this._lexer.getToken();
       lhs **= this._exponentialExpr();
@@ -232,43 +234,44 @@ class Parser {
     return lhs;
   }
 
-  _base () {
-    // <base> ::= <number> | <group> | <identExpr>
+  _baseExpr () {
+    // <_baseExpr> ::= <number> | <_groupExpr> | <_identExpr>
     const id = this._lexer.peekToken().id;
-    if (id === TOK_NUM) {
+    if (id === TOK_NUM) { // <number>
       return this._lexer.getToken().val;
     }
     if (id === TOK_LPAREN) {
-      return this._group();
+      return this._groupExpr();
     }
     return this._identExpr();
   }
 
-  _group () {
-    // <group> ::= "(" <additiveExpr> ")"
+  _groupExpr () {
+    // <_groupExpr> ::= "(" <_expression> ")"
     if (this._lexer.getToken().id !== TOK_LPAREN) {
-      throw SyntaxError();
+      throw new SyntaxError();
     }
-    const val = this._additiveExpr();
+    const val = this._expression();
     if (this._lexer.getToken().id !== TOK_RPAREN) {
-      throw SyntaxError();
+      throw new SyntaxError();
     }
     return val;
   }
 
-  _emptyGroup () {
-    // <emptyGroup> ::= "()"
+  _emptyGroupExpr () {
+    // <_emptyGroupExpr> ::= "()"
     if (this._lexer.getToken().id !== TOK_LPAREN || this._lexer.getToken().id !== TOK_RPAREN) {
-      throw SyntaxError();
+      throw new SyntaxError();
     }
   }
 
   _identExpr () {
-    // <identExpr> ::= pi | e | <unary_fn>
-    // <unary_fn> ::= <ident> <group>
+    // <_identExpr> ::= "pi" | "e" | "last" | <function call>
+    // <function call> ::= <unary fn ident> <_groupExpr>
+    //                   | <nullary fn ident> <_emptyGroupExpr>
     const token = this._lexer.getToken();
     if (token.id !== TOK_IDENT) {
-      throw SyntaxError();
+      throw new SyntaxError();
     }
 
     switch (token.val) {
@@ -279,48 +282,48 @@ class Parser {
       case 'last':
         return this._last_val;
       case 'abs':
-        return Math.abs(this._group());
+        return Math.abs(this._groupExpr());
       case 'acos':
-        return Math.acos(this._group());
+        return Math.acos(this._groupExpr());
       case 'acosh':
-        return Math.acosh(this._group());
+        return Math.acosh(this._groupExpr());
       case 'asin':
-        return Math.asin(this._group());
+        return Math.asin(this._groupExpr());
       case 'asinh':
-        return Math.asinh(this._group());
+        return Math.asinh(this._groupExpr());
       case 'atan':
-        return Math.atan(this._group());
+        return Math.atan(this._groupExpr());
       case 'atanh':
-        return Math.atanh(this._group());
+        return Math.atanh(this._groupExpr());
       case 'cbrt':
-        return Math.cbrt(this._group());
+        return Math.cbrt(this._groupExpr());
       case 'ceil':
-        return Math.ceil(this._group());
+        return Math.ceil(this._groupExpr());
       case 'cos':
-        return Math.cos(this._group());
+        return Math.cos(this._groupExpr());
       case 'cosh':
-        return Math.cosh(this._group());
+        return Math.cosh(this._groupExpr());
       case 'exp':
-        return Math.exp(this._group());
+        return Math.exp(this._groupExpr());
       case 'floor':
-        return Math.floor(this._group());
+        return Math.floor(this._groupExpr());
       case 'log':
       case 'ln':
-        return Math.log(this._group());
+        return Math.log(this._groupExpr());
       case 'random':
-        this._emptyGroup(); return Math.random();
+        this._emptyGroupExpr(); return Math.random();
       case 'round':
-        return Math.round(this._group());
+        return Math.round(this._groupExpr());
       case 'sin':
-        return Math.sin(this._group());
+        return Math.sin(this._groupExpr());
       case 'sinh':
-        return Math.sinh(this._group());
+        return Math.sinh(this._groupExpr());
       case 'sqrt':
-        return Math.sqrt(this._group());
+        return Math.sqrt(this._groupExpr());
       case 'tan':
-        return Math.tanh(this._group());
+        return Math.tanh(this._groupExpr());
       case 'trunc':
-        return Math.trunc(this._group());
+        return Math.trunc(this._groupExpr());
       default:
         throw new UndefinedIdent(token.val);
     }
@@ -348,7 +351,7 @@ const Calculator = new Lang.Class({
     // (do after settings bindings have been made)
     this._initIcon();
 
-    // container for entry and icon elements
+    // container (box) for entry and icon elements
     this._initContainer();
 
     // events
@@ -373,14 +376,6 @@ const Calculator = new Lang.Class({
       'visible',
       Gio.SettingsBindFlags.DEFAULT
     );
-
-
-    const menuItem = new PopupMenu.PopupBaseMenuItem({
-      reactive: false
-    });
-//    this._exprEntry.menu.addMenuItem(menuItem);
-
-
   },
 
   _initPopup () { // popup will have secondary expression entry field and help content
@@ -393,26 +388,26 @@ const Calculator = new Lang.Class({
       width: MENU_ITEM_WIDTH,
       style_class: 'expr-entry2'
     });
-    const helpItem = new PopupMenu.PopupBaseMenuItem({
+    const menuItem = new PopupMenu.PopupBaseMenuItem({
       reactive: false
     });
-    helpItem.actor.add_actor(this._exprEntry2);
-    this.menu.addMenuItem(helpItem);
+    menuItem.actor.add_actor(this._exprEntry2);
+    this.menu.addMenuItem(menuItem);
 
     const helpText = new St.Label({
       text: this._helpContent(),
       width: MENU_ITEM_WIDTH,
       style_class: 'help-text'
     });
-    this._helpTextItem = new PopupMenu.PopupBaseMenuItem({
+    this._helpMenuItem = new PopupMenu.PopupBaseMenuItem({
       reactive: false
     });
-    this._helpTextItem.actor.add_actor(helpText);
-    this.menu.addMenuItem(this._helpTextItem);
+    this._helpMenuItem.actor.add_actor(helpText);
+    this.menu.addMenuItem(this._helpMenuItem);
 
     this._settings.bind(
       'show-help-on-popup',
-      this._helpTextItem,
+      this._helpMenuItem,
       'visible',
       Gio.SettingsBindFlags.DEFAULT
     );
@@ -428,10 +423,10 @@ const Calculator = new Lang.Class({
   },
 
   _initContainer () { // container for entry and icon elements
-    this._calcBox = new St.BoxLayout();
-    this._calcBox.add(this._exprEntry);
-    this._calcBox.add(this._icon);
-    this.actor.add_actor(this._calcBox);
+    const calcBox = new St.BoxLayout();
+    calcBox.add(this._exprEntry);
+    calcBox.add(this._icon);
+    this.actor.add_actor(calcBox);
   },
 
   _initEvents () { // events:
@@ -454,7 +449,7 @@ const Calculator = new Lang.Class({
 
   _on_button_release (actor, event) {
     if (actor._exprFocusedIn) {
-      actor.set_selection(0, actor.get_text().length); // can't simply do this in key_focus_in handler
+      actor.set_selection(0, actor.get_text().length); // doesn't work to simply do this in _on_key_focus_in; don't know why
       actor._exprFocusedIn = false;
     }
   },
@@ -472,7 +467,7 @@ const Calculator = new Lang.Class({
       } else if (e instanceof NoExpression) {
         result = '';
       } else {
-        result = 'Internal error';
+        result = 'Unexpected error';
       }
     }
     this._exprEntry.set_text(result);
@@ -481,7 +476,7 @@ const Calculator = new Lang.Class({
   },
 
   _iconName () {
-    if (this._exprEntry.visible && this._helpTextItem.visible) {
+    if (this._exprEntry.visible && this._helpMenuItem.visible) {
       return 'dialog-question-symbolic';
     }
     return 'accessories-calculator-symbolic';
