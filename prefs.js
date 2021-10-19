@@ -6,8 +6,58 @@ const ExtensionUtils = imports.misc.extensionUtils;
 function init () {
 }
 
-function _makeHbox () {
-  return new Gtk.Box({
+function buildPrefsWidget () {
+  const settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.tbcalc');
+
+  const list = new Gtk.ListBox({
+    selection_mode: Gtk.SelectionMode.NONE,
+    show_separators: true,
+    halign: Gtk.Align.CENTER,
+    valign: Gtk.Align.START,
+    hexpand: true,
+    margin_start: 60,
+    margin_end: 60,
+    margin_top: 60,
+    margin_bottom: 60
+  });
+
+  _makeToggleRow(
+    settings,
+    'allow-entry-on-taskbar',
+    'Enable entry of expressions directly in the taskbar',
+    list);
+
+  _makeToggleRow(
+    settings,
+    'show-help-on-popup',
+    'Show help on popup',
+    list);
+
+  return list;
+}
+
+function _makeToggleRow (settings, settingId, settingText, list) {
+  const label = new Gtk.Label({
+    label: settingText,
+    hexpand: true,
+    halign: Gtk.Align.START
+  });
+
+  const toggle = new Gtk.Switch({
+    active: settings.get_boolean(settingId),
+    margin_start: 20,
+    halign: Gtk.Align.END,
+    visible: true
+  });
+
+  settings.bind(
+    settingId,
+    toggle,
+    'active',
+    Gio.SettingsBindFlags.DEFAULT
+  );
+
+  const hbox = new Gtk.Box({
     orientation: Gtk.Orientation.HORIZONTAL,
     spacing: 10,
     margin_start: 10,
@@ -15,82 +65,12 @@ function _makeHbox () {
     margin_top: 10,
     margin_bottom: 10
   });
-}
 
-function buildPrefsWidget () {
-  const settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.tbcalc');
-
-  // callow-entry-on-taskbar:
-
-  const entryLabel = new Gtk.Label({
-    label: 'Enable entry of expressions directly in the taskbar',
-    hexpand: true,
-    halign: Gtk.Align.START
+  const row = new Gtk.ListBoxRow({
+    child: hbox
   });
 
-  const entryToggle = new Gtk.Switch({
-    active: settings.get_boolean('allow-entry-on-taskbar'),
-    halign: Gtk.Align.END,
-    visible: true
-  });
-
-  settings.bind(
-    'allow-entry-on-taskbar',
-    entryToggle,
-    'active',
-    Gio.SettingsBindFlags.DEFAULT
-  );
-
-  // setting for show-help-on-popup:
-
-  const helpLabel = new Gtk.Label({
-    label: 'Show help on popup',
-    hexpand: true,
-    halign: Gtk.Align.START
-  });
-
-  const helpToggle = new Gtk.Switch({
-    active: settings.get_boolean('show-help-on-popup'),
-    halign: Gtk.Align.END,
-    visible: true
-  });
-
-  settings.bind(
-    'show-help-on-popup',
-    helpToggle,
-    'active',
-    Gio.SettingsBindFlags.DEFAULT
-  );
-
-  // finish:
-
-  const preferencesVbox = new Gtk.Box({
-    name: 'preferences-vbox',
-    orientation: Gtk.Orientation.VERTICAL,
-    spacing: 8,
-    margin_start: 80,
-    margin_end: 80,
-    margin_top: 30,
-    margin_bottom: 30
-  });
-
-  if (imports.gi.versions.Gtk === '4.0') {
-    let hbox = _makeHbox();
-    hbox.append(entryLabel); hbox.append(entryToggle);
-    preferencesVbox.append(hbox);
-
-    hbox = _makeHbox();
-    hbox.append(helpLabel); hbox.append(helpToggle);
-    preferencesVbox.append(hbox);
-  } else {
-    let hbox = _makeHbox();
-    pack_start(entryLabel, true, true, 0); pack_start(entryToggle, false, false, 0);
-    preferencesVbox.pack_start(hbox, true, false, 0);
-
-    hbox = _makeHbox();
-    pack_start(helpLabel, true, true, 0); pack_start(helpToggle, false, false, 0);
-    preferencesVbox.pack_start(hbox, true, false, 0);
-  }
-
-  return preferencesVbox;
+  hbox.append(label);
+  hbox.append(toggle);
+  list.append(row);
 }
