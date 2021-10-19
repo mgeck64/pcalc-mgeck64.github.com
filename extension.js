@@ -421,6 +421,7 @@ const Calculator = new Lang.Class({
   _initIcon () { // taskbar icon
     this._icon = new St.Icon({
       icon_name: this._iconName(),
+      y_align: Clutter.ActorAlign.CENTER,
       style_class: 'system-status-icon'
     });
     this._settings.connect('changed', Lang.bind(this, this._settingsChanged));
