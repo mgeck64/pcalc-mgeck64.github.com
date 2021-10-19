@@ -12,8 +12,8 @@ The calculator can be configured to not present the entry field on the panel, in
 which case it's icon can be pressed (clicked) to present the popup with the
 larger entry field.
 
-The calculator can also be configured to not present help information on the
-popup, in which case the popup will just have the larger entry field.
+The calculator can also be configured to not show help information on the popup,
+in which case the popup will just have the larger entry field.
 ## Basic guide for expressions
 An example of an expression is 2+4*8, which means multiply 4 by 8 and add 2 to
 the result.
