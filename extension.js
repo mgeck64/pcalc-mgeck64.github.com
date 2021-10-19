@@ -339,15 +339,15 @@ const Calculator = new Lang.Class({
 
   _init () {
     this.parent(0.0, 'Calculator', false);
-    this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.tbcalc');
+    this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.pcalc');
 
-    // taskbar expression entry field
+    // panel expression entry field
     this._initEntry();
 
     // popup; will have secondary expression entry field and help content
     this._initPopup();
 
-    // taskbar icon
+    // panel icon
     // (do after settings bindings have been made)
     this._initIcon();
 
@@ -361,7 +361,7 @@ const Calculator = new Lang.Class({
     this._parser = new Parser();
   },
 
-  _initEntry () { // taskbar expression entry field
+  _initEntry () { // panel expression entry field
     this._exprEntry = new St.Entry({
       hint_text: 'Enter math expression',
       track_hover: true,
@@ -371,7 +371,7 @@ const Calculator = new Lang.Class({
     });
 
     this._settings.bind(
-      'allow-entry-on-taskbar',
+      'allow-entry-on-panel',
       this._exprEntry,
       'visible',
       Gio.SettingsBindFlags.DEFAULT
@@ -413,7 +413,7 @@ const Calculator = new Lang.Class({
     );
   },
 
-  _initIcon () { // taskbar icon
+  _initIcon () { // panel icon
     this._icon = new St.Icon({
       icon_name: this._iconName(),
       y_align: Clutter.ActorAlign.CENTER,

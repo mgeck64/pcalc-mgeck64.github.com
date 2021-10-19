@@ -7,7 +7,7 @@ function init () {
 }
 
 function buildPrefsWidget () {
-  const settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.tbcalc');
+  const settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.pcalc');
 
   const list = new Gtk.ListBox({
     selection_mode: Gtk.SelectionMode.NONE,
@@ -23,8 +23,8 @@ function buildPrefsWidget () {
 
   _makeToggleRow(
     settings,
-    'allow-entry-on-taskbar',
-    'Enable entry of expressions directly in the taskbar',
+    'allow-entry-on-panel',
+    'Enable entry of expressions directly on the panel',
     list);
 
   _makeToggleRow(

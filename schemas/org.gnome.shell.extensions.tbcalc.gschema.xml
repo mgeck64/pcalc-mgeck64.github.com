@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.gnome.shell.extensions.tbcalc" path="/org/gnome/shell/extensions/tbcalc/">
+  <schema id="org.gnome.shell.extensions.pcalc" path="/org/gnome/shell/extensions/pcalc/">
     <!-- See also: https://developer.gnome.org/glib/stable/gvariant-format-strings.html -->
-    <key name="allow-entry-on-taskbar" type="b">
+    <key name="allow-entry-on-panel" type="b">
       <default>true</default>
     </key>
     <key name="show-help-on-popup" type="b">

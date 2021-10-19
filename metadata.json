@@ -1,10 +1,10 @@
 {
-    "name" : "Taskbar Calculator",
-    "description" : "Text-based calculator for the taskbar",
+    "name" : "Panel Calculator",
+    "description" : "Text-based calculator for the panel",
     "shell-version" : [
         "40"
     ],
     "url" : "",
-    "uuid" : "tbcalc@mgeck64.github.com",
+    "uuid" : "pcalc@mgeck64.github.com",
     "version" : 1.0
 }
