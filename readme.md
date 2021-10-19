@@ -1,6 +1,6 @@
 # pcalc
 
-A text-based calculator that lives on the panel (top bar), out of the way of
+A text-based calculator that lives on the gnome panel (top bar), out of the way of
 your work.
 
 In it's default configuration, it presents an entry field on the panel in which
