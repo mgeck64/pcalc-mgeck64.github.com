@@ -1,6 +1,5 @@
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
-const GObject = imports.gi.GObject;
 const ExtensionUtils = imports.misc.extensionUtils;
 
 function init () {
