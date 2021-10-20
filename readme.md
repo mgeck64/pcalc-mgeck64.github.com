@@ -4,13 +4,13 @@ A text-based calculator that lives on the gnome panel (top bar), out of the way
 of your work.
 
 In it's default configuration, the calculator provides an entry field on the
-panel in which a mathematical expression can be entered; it also provides an
-icon next to it that can be pressed (clicked) to present a popup that has a
-larger entry field and help information.
+panel into which a mathematical expression to be evaluated can be entered; the
+calculator also provides an icon next to the entry field that can be pressed
+(clicked) to present a popup that has a larger entry field and help information.
 
-The calculator can be configured to not provide the entry field on the panel, in
-which case the icon can still be pressed (clicked) to present the popup having
-the larger entry field.
+The calculator can be configured to disable the entry field on the panel so that
+only the icon appears there; pressing (clicking) the icon presents the popup
+having the larger entry field.
 
 The calculator can also be configured to not show help information on the popup,
 in which case the popup will have the larger entry field by itself.
