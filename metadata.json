@@ -2,7 +2,7 @@
     "name" : "Panel Calculator",
     "description" : "Text-based calculator for the panel",
     "shell-version" : [
-        "40"
+        "3.36", "40"
     ],
     "url" : "",
     "uuid" : "pcalc@mgeck64.github.com",
