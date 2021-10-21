@@ -426,31 +426,43 @@ const Calculator = GObject.registerClass(
     }
 
     _initEvents () { // events:
-      this.connect('button_press_event', function (actor, event) {
-        this._exprEntry2.grab_key_focus();
-      }.bind(this));
+      this.connect('button_press_event', this._onButtonPressThis.bind(this));
 
-      this._exprEntry.clutter_text.connect('key_focus_in', this._onKeyFocusIn.bind(this));
-      this._exprEntry.clutter_text.connect('button-release-event', this._onButtonRelease.bind(this));
-      this._exprEntry.clutter_text.connect('activate', this._onActivate.bind(this));
+      this._exprEntry.clutter_text.connect('key_focus_in', this._onKeyFocusInEntry.bind(this));
+      this._exprEntry.clutter_text.connect('button-release-event', this._onButtonReleaseEntry.bind(this));
+      this._exprEntry.clutter_text.connect('activate', this._onActivateEntry.bind(this));
 
-      this._exprEntry2.clutter_text.connect('key_focus_in', this._onKeyFocusIn.bind(this));
-      this._exprEntry2.clutter_text.connect('button-release-event', this._onButtonRelease.bind(this));
-      this._exprEntry2.clutter_text.connect('activate', this._onActivate.bind(this));
+      this._exprEntry2.clutter_text.connect('key_focus_in', this._onKeyFocusInEntry.bind(this));
+      this._exprEntry2.clutter_text.connect('key_focus_out', this._onKeyFocusOutEntry.bind(this));
+      this._exprEntry2.clutter_text.connect('button-release-event', this._onButtonReleaseEntry.bind(this));
+      this._exprEntry2.clutter_text.connect('activate', this._onActivateEntry.bind(this));
     }
 
-    _onKeyFocusIn (actor, event) {
+    _onButtonPressThis () {
+      this._exprEntry2.grab_key_focus();
+    }
+
+    _onKeyFocusInEntry (actor, event) {
       actor._exprFocusedIn = true;
     }
 
-    _onButtonRelease (actor, event) {
+    _onKeyFocusOutEntry (actor, event) { // (not necessary for _exprEntry)
+      const endIdx = actor.get_text().length;
+      actor.set_selection(endIdx, endIdx);
+    }
+
+    _onButtonReleaseEntry (actor, event) {
       if (actor._exprFocusedIn) {
         actor.set_selection(0, actor.get_text().length); // doesn't work to simply do this in _onKeyFocusIn; don't know why
         actor._exprFocusedIn = false;
       }
     }
 
-    _onActivate (actor, event) {
+    _onKeyPressEntry (actor, event) {
+      actor._exprFocusedIn = false;
+    }
+
+    _onActivateEntry (actor, event) {
       let result;
       try {
         const expr = actor.get_text();
@@ -469,6 +481,7 @@ const Calculator = GObject.registerClass(
       this._exprEntry.set_text(result);
       this._exprEntry2.set_text(result);
       actor.set_selection(0, result.length);
+      actor._exprFocusedIn = false;
     }
 
     _iconName () {
