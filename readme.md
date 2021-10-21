@@ -3,8 +3,8 @@
 A text-based calculator that lives on the gnome panel (top bar), out of the way
 of your work.
 
-In it's default configuration, the calculator provides an entry field on the
-panel into which a mathematical expression to be evaluated can be entered; the
+In it's default configuration, the calculator provides a text entry field on the
+panel into which a mathematical expression can be entered for evaluation; the
 calculator also provides an icon next to the entry field that can be pressed
 (clicked) to present a popup that has a larger entry field and help information.
 
