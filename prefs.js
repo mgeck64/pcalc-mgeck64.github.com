@@ -8,9 +8,8 @@ function init () {
 function buildPrefsWidget () {
   const settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.pcalc');
 
-  const list = new Gtk.ListBox({
+  let widget = new Gtk.ListBox({
     selection_mode: Gtk.SelectionMode.NONE,
-    show_separators: true,
     halign: Gtk.Align.CENTER,
     valign: Gtk.Align.START,
     hexpand: true,
@@ -20,31 +19,54 @@ function buildPrefsWidget () {
     margin_bottom: 60
   });
 
+  if (typeof widget.append === 'function') { // presumably, Gtx 4.0+
+    widget.show_separators = true;
+  } else { // this is happening in ubuntu 21.04
+    // Gtx.Listbox.append, Gtx.Listbox.show_separators, and also Gtk.Box.append
+    // are missing--they're not available in Gtk pre-4.0. Can't figure out how
+    // to add items to ListBox without the append functions (tried using
+    // Box.pack_end ListBox.insert unsucessfully), so substituting simple
+    // Gtk.Grid instead. (we don't simply just use Grid exclusively because
+    // ListBox is visually more appropriate)
+    widget = new Gtk.Grid({
+      margin_start: 18,
+      margin_end: 18,
+      margin_top: 30,
+      margin_bottom: 18,
+      column_spacing: 0,
+      row_spacing: 20,
+      visible: true
+    });
+  }
+
   _makeToggleRow(
     settings,
     'allow-entry-on-panel',
     'Enable entry of expressions directly on the panel',
-    list);
+    0,
+    widget);
 
   _makeToggleRow(
     settings,
     'show-help-on-popup',
-    'Show help on popup',
-    list);
+    'Show help on the popup',
+    1,
+    widget);
 
-  return list;
+  return widget;
 }
 
-function _makeToggleRow (settings, settingId, settingText, list) {
+function _makeToggleRow (settings, settingId, settingLabel, rowNum, widget) {
   const label = new Gtk.Label({
-    label: settingText,
+    label: settingLabel,
+    halign: Gtk.Align.START,
+    margin_end: 30,
     hexpand: true,
-    halign: Gtk.Align.START
+    visible: true
   });
 
   const toggle = new Gtk.Switch({
     active: settings.get_boolean(settingId),
-    margin_start: 20,
     halign: Gtk.Align.END,
     visible: true
   });
@@ -56,20 +78,25 @@ function _makeToggleRow (settings, settingId, settingText, list) {
     Gio.SettingsBindFlags.DEFAULT
   );
 
-  const hbox = new Gtk.Box({
-    orientation: Gtk.Orientation.HORIZONTAL,
-    spacing: 10,
-    margin_start: 10,
-    margin_end: 10,
-    margin_top: 10,
-    margin_bottom: 10
-  });
+  if (widget instanceof Gtk.ListBox) {
+    const hbox = new Gtk.Box({
+      orientation: Gtk.Orientation.HORIZONTAL,
+      spacing: 10,
+      margin_start: 10,
+      margin_end: 10,
+      margin_top: 16,
+      margin_bottom: 16
+    });
 
-  const row = new Gtk.ListBoxRow({
-    child: hbox
-  });
+    const row = new Gtk.ListBoxRow({
+      child: hbox
+    });
 
-  hbox.append(label);
-  hbox.append(toggle);
-  list.append(row);
+    hbox.append(label);
+    hbox.append(toggle);
+    widget.append(row);
+  } else {
+    widget.attach(label, 0, rowNum, 1, 1);
+    widget.attach(toggle, 1, rowNum, 1, 1);
+  }
 }
