@@ -3,20 +3,29 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Lexer = Me.imports.lexer.Lexer;
 const {
-  TOK_UNKNOWN, TOK_END, TOK_NUM, TOK_ADD, TOK_SUB, TOK_MUL, TOK_DIV,
-  TOK_EXP = 7, TOK_LPAREN, TOK_RPAREN, TOK_IDENT, TOK_COMMA
+  TOK_UNKNOWN, TOK_END, TOK_NUM, TOK_ADD, TOK_SUB, TOK_MUL, TOK_DIV, TOK_EXP,
+  TOK_LPAREN, TOK_RPAREN, TOK_IDENT, TOK_COMMA
 } = Me.imports.lexer;
 
-// Parser-----------------------------------------------------------------------
-// evaluates expressions
+// Parser exceptions------------------------------------------------------------
+// note: if add or delete an exception then update imports in calculator.js
 
-const NoExpression = class NoExpression {}; // exception
+const NoExpression = class NoExpression {};
 
-const UndefinedIdent = class UndefinedIdent { // exception
+const UndefinedIdent = class UndefinedIdent {
   constructor (ident) {
     this.ident = ident; // identifier string
   }
 };
+
+const CantConvertNumber = class CantConvertNumber {
+  constructor (numStr) {
+    this.numStr = numStr;
+  }
+};
+
+// Parser-----------------------------------------------------------------------
+// evaluates expressions
 
 const Parser = class Parser {
   constructor () {
@@ -96,7 +105,12 @@ const Parser = class Parser {
     // <_baseExpr> ::= <number> | <_groupExpr> | <_identExpr>
     const id = this._lexer.peekToken().id;
     if (id === TOK_NUM) { // <number>
-      return this._lexer.getToken().val;
+      const val = +this._lexer.peekToken().val; // converts to internal numeric
+      if (isNaN(val)) {
+        throw new CantConvertNumber(this._lexer.peekToken().val);
+      }
+      this._lexer.getToken();
+      return val;
     }
     if (id === TOK_LPAREN) {
       return this._groupExpr();

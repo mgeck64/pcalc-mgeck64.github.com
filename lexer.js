@@ -50,8 +50,8 @@ const Lexer = class Lexer {
     // test for number
     this._tryNumber();
     if (idxStart !== this._idx) {
-      return { id: TOK_NUM, val: +this._expr.substring(idxStart, this._idx) };
-      // note + in front of substring, which converts string to number
+      return { id: TOK_NUM, val: this._expr.substring(idxStart, this._idx) };
+      // parser will do conversion to numeric type
     }
 
     // test for identifier
@@ -92,8 +92,32 @@ const Lexer = class Lexer {
     let idx2 = this._idx;
     let digits = false;
     let dpoint = false;
-    for (;;) {
-      if (/[0-9]/.test(this._expr[idx2])) {
+    const decimalPattern = /[0-9]/;
+    let digitPattern = decimalPattern;
+
+    // number begins with radix prefix (0b, 0o, 0x), digit or decimal point
+    const subLen = this._exprLen - this._idx;
+    if (subLen >= 2 && this._expr[idx2] === '0' && /[bB]/.test(this._expr[idx2 + 1])) {
+      digitPattern = /[01]/;
+      idx2 += 2;
+    } else if (subLen >= 2 && this._expr[idx2] === '0' && /[oO]/.test(this._expr[idx2 + 1])) {
+      digitPattern = /[0-7]/;
+      idx2 += 2;
+    } else if (subLen >= 2 && this._expr[idx2] === '0' && /[xX]/.test(this._expr[idx2 + 1])) {
+      digitPattern = /[0-9a-fA-F]/;
+      idx2 += 2;
+    } else if (subLen >= 1 && decimalPattern.test(this._expr[idx2])) {
+      digits = true;
+      ++idx2;
+    } else if (subLen >= 1 && this._expr[idx2] === '.') {
+      dpoint = true;
+      ++idx2;
+    } else {
+      return;
+    }
+
+    while (idx2 !== this._exprLen) {
+      if (digitPattern.test(this._expr[idx2])) {
         digits = true;
         ++idx2;
       } else if (this._expr[idx2] === '.') {
@@ -105,9 +129,6 @@ const Lexer = class Lexer {
       } else {
         break;
       }
-      if (idx2 === this._exprLen) {
-        break;
-      }
     }
 
     if (digits) { // check for 'e' exponential notation
@@ -117,10 +138,9 @@ const Lexer = class Lexer {
         if (idx3 !== this._exprLen && /[+-]/.test(this._expr[idx3])) {
           ++idx3;
         }
-        let digitRegEx = /[0-9]/;
-        if (idx3 !== this._exprLen && digitRegEx.test(this._expr[idx3])) {
+        if (idx3 !== this._exprLen && decimalPattern.test(this._expr[idx3])) {
           ++idx3;
-          while (digitRegEx.test(this._expr[idx3])) {
+          while (decimalPattern.test(this._expr[idx3])) {
             ++idx3;
           }
           idx2 = idx3;

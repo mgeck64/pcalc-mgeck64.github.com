@@ -4,7 +4,7 @@ const PopupMenu = imports.ui.popupMenu;
 const ExtensionUtils = imports.misc.extensionUtils;
 
 const Me = ExtensionUtils.getCurrentExtension();
-const {NoExpression, UndefinedIdent, Parser} = Me.imports.parser;
+const {NoExpression, UndefinedIdent, CantConvertNumber, Parser} = Me.imports.parser;
 
 // Calculator-------------------------------------------------------------------
 // (calculator user interface)
@@ -37,7 +37,7 @@ class _Calculator extends PanelMenu.Button {
 
   _initEntry () { // panel expression entry field
     this._exprEntry = new St.Entry({
-      hint_text: 'Enter math expression',
+      hint_text: 'Enter expression',
       track_hover: true,
       can_focus: true,
       y_align: Clutter.ActorAlign.CENTER,
@@ -141,6 +141,8 @@ class _Calculator extends PanelMenu.Button {
         result = '"' + e.ident + '" is undefined';
       } else if (e instanceof NoExpression) {
         result = '';
+      } else if (e instanceof CantConvertNumber) {
+        result = '"' + e.numStr + '" is invalid number';
       } else {
         result = 'Unexpected error';
       }
