@@ -54,7 +54,7 @@ The following special values and functions are available:\
 &nbsp;&nbsp;&nbsp;&nbsp;sqrt(x) : Square root of x\
 &nbsp;&nbsp;&nbsp;&nbsp;tan(x) : Tangent of an angle\
 &nbsp;&nbsp;&nbsp;&nbsp;tanh(x) : Hyperbolic tangent of a number\
-&nbsp;&nbsp;&nbsp;&nbsp;trunc(x) : Integer part of a number x\
+&nbsp;&nbsp;&nbsp;&nbsp;trunc(x) : Integer part of a number x
 ## Manual installation notes
 - Place the project folder in **~/.local/share/gnome-shell/extensions**
 - Rename the folder to **pcalc<span>@</span>mgeck64.github.com** so the gnome shell will find it
