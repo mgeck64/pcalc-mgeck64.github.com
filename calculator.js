@@ -176,31 +176,30 @@ Use parentheses to override operator precedence; e.g.,\n\
 The following special values and functions are available:\n\
     pi : Did you know that March 14 is Pi day?\n\
     e : Euler\'s number\n\
-    last : the last calculated value\n\
-    abs(x) : absolute value of x\n\
-    acos(x) : arccosine of x, in radians\n\
-    acosh(x) : hyperbolic arccosine of x\n\
-    asin(x) : arcsine of x, in radians\n\
-    asinh(x) : hyperbolic arcsine of x\n\
-    atan(x) : arctangent of x between -pi and pi radians\n\
-    atanh(x) : hyperbolic arctangent of x\n\
-    cbrt(x) : cubic root of x\n\
+    last : The last calculated value\n\
+    abs(x) : Absolute value of x\n\
+    acos(x) : Arccosine of x, in radians\n\
+    acosh(x) : Hyperbolic arccosine of x\n\
+    asin(x) : Arcsine of x, in radians\n\
+    asinh(x) : Hyperbolic arcsine of x\n\
+    atan(x) : Arctangent of x between -pi and pi radians\n\
+    atan2(y, x) : Arctangent of the quotient of its arguments\n\
+    atanh(x) : Hyperbolic arctangent of x\n\
+    cbrt(x) : Cubic root of x\n\
     ceil(x) : x rounded upwards to the nearest integer\n\
-    cos(x) : cosine of x (x is in radians)\n\
-    cosh(x) : hyperbolic cosine of x\n\
-    exp(x) : value of e raised to the power of x\n\
+    cos(x) : Cosine of x (x is in radians)\n\
+    cosh(x) : Hyperbolic cosine of x\n\
+    exp(x) : Value of e raised to the power of x\n\
     floor(x) : x rounded downwards to the nearest integer\n\
-    ln(x) or log(x) : natural logarithm (base e) of x\n\
-    random() : random number between 0 and 1\n\
-    round(x) : rounds x to the nearest integer\n\
-    sin(x) : sine of x (x is in radians)\n\
-    sinh(x) : hyperbolic sine of x\n\
-    sqrt(x) : square root of x\n\
-    tan(x) : tangent of an angle\n\
-    tanh(x) : hyperbolic tangent of a number\n\
-    trunc(x) : integer part of a number x\n\
-    tanh(x) : hyperbolic tangent of a number\n\
-    trunc(x) : integer part of a number x';
+    ln(x) or log(x) : Natural logarithm (base e) of x\n\
+    random() : Random number between 0 and 1\n\
+    round(x) : Rounds x to the nearest integer\n\
+    sin(x) : Sine of x (x is in radians)\n\
+    sinh(x) : Hyperbolic sine of x\n\
+    sqrt(x) : Square root of x\n\
+    tan(x) : Tangent of an angle\n\
+    tanh(x) : Hyperbolic tangent of a number\n\
+    trunc(x) : Integer part of a number x';
   }
 }
 

@@ -31,31 +31,30 @@ Use parentheses to override operator precedence; e.g.,
 The following special values and functions are available:\
 &nbsp;&nbsp;&nbsp;&nbsp;pi : Did you know that March 14 is Pi day?\
 &nbsp;&nbsp;&nbsp;&nbsp;e : Euler\'s number\
-&nbsp;&nbsp;&nbsp;&nbsp;last : the last calculated value\
-&nbsp;&nbsp;&nbsp;&nbsp;abs(x) : absolute value of x\
-&nbsp;&nbsp;&nbsp;&nbsp;acos(x) : arccosine of x, in radians\
-&nbsp;&nbsp;&nbsp;&nbsp;acosh(x) : hyperbolic arccosine of x\
-&nbsp;&nbsp;&nbsp;&nbsp;asin(x) : arcsine of x, in radians\
-&nbsp;&nbsp;&nbsp;&nbsp;asinh(x) : hyperbolic arcsine of x\
-&nbsp;&nbsp;&nbsp;&nbsp;atan(x) : arctangent of x between -pi and pi radians\
-&nbsp;&nbsp;&nbsp;&nbsp;atanh(x) : hyperbolic arctangent of x\
-&nbsp;&nbsp;&nbsp;&nbsp;cbrt(x) : cubic root of x\
+&nbsp;&nbsp;&nbsp;&nbsp;last : The last calculated value\
+&nbsp;&nbsp;&nbsp;&nbsp;abs(x) : Absolute value of x\
+&nbsp;&nbsp;&nbsp;&nbsp;acos(x) : Arccosine of x, in radians\
+&nbsp;&nbsp;&nbsp;&nbsp;acosh(x) : Hyperbolic arccosine of x\
+&nbsp;&nbsp;&nbsp;&nbsp;asin(x) : Arcsine of x, in radians\
+&nbsp;&nbsp;&nbsp;&nbsp;asinh(x) : Hyperbolic arcsine of x\
+&nbsp;&nbsp;&nbsp;&nbsp;atan(x) : Arctangent of x between -pi and pi radians\
+&nbsp;&nbsp;&nbsp;&nbsp;atan2(y, x) : Arctangent of the quotient of its arguments\
+&nbsp;&nbsp;&nbsp;&nbsp;atanh(x) : Hyperbolic arctangent of x\
+&nbsp;&nbsp;&nbsp;&nbsp;cbrt(x) : Cubic root of x\
 &nbsp;&nbsp;&nbsp;&nbsp;ceil(x) : x rounded upwards to the nearest integer\
-&nbsp;&nbsp;&nbsp;&nbsp;cos(x) : cosine of x (x is in radians)\
-&nbsp;&nbsp;&nbsp;&nbsp;cosh(x) : hyperbolic cosine of x\
-&nbsp;&nbsp;&nbsp;&nbsp;exp(x) : value of e raised to the power of x\
+&nbsp;&nbsp;&nbsp;&nbsp;cos(x) : Cosine of x (x is in radians)\
+&nbsp;&nbsp;&nbsp;&nbsp;cosh(x) : Hyperbolic cosine of x\
+&nbsp;&nbsp;&nbsp;&nbsp;exp(x) : Value of e raised to the power of x\
 &nbsp;&nbsp;&nbsp;&nbsp;floor(x) : x rounded downwards to the nearest integer\
-&nbsp;&nbsp;&nbsp;&nbsp;ln(x) or log(x) : natural logarithm (base e) of x\
-&nbsp;&nbsp;&nbsp;&nbsp;random() : random number between 0 and 1\
-&nbsp;&nbsp;&nbsp;&nbsp;round(x) : rounds x to the nearest integer\
-&nbsp;&nbsp;&nbsp;&nbsp;sin(x) : sine of x (x is in radians)\
-&nbsp;&nbsp;&nbsp;&nbsp;sinh(x) : hyperbolic sine of x\
-&nbsp;&nbsp;&nbsp;&nbsp;sqrt(x) : square root of x\
-&nbsp;&nbsp;&nbsp;&nbsp;tan(x) : tangent of an angle\
-&nbsp;&nbsp;&nbsp;&nbsp;tanh(x) : hyperbolic tangent of a number\
-&nbsp;&nbsp;&nbsp;&nbsp;trunc(x) : integer part of a number x\
-&nbsp;&nbsp;&nbsp;&nbsp;tanh(x) : hyperbolic tangent of a number\
-&nbsp;&nbsp;&nbsp;&nbsp;trunc(x) : integer part of a number x
+&nbsp;&nbsp;&nbsp;&nbsp;ln(x) or log(x) : Natural logarithm (base e) of x\
+&nbsp;&nbsp;&nbsp;&nbsp;random() : Random number between 0 and 1\
+&nbsp;&nbsp;&nbsp;&nbsp;round(x) : Rounds x to the nearest integer\
+&nbsp;&nbsp;&nbsp;&nbsp;sin(x) : Sine of x (x is in radians)\
+&nbsp;&nbsp;&nbsp;&nbsp;sinh(x) : Hyperbolic sine of x\
+&nbsp;&nbsp;&nbsp;&nbsp;sqrt(x) : Square root of x\
+&nbsp;&nbsp;&nbsp;&nbsp;tan(x) : Tangent of an angle\
+&nbsp;&nbsp;&nbsp;&nbsp;tanh(x) : Hyperbolic tangent of a number\
+&nbsp;&nbsp;&nbsp;&nbsp;trunc(x) : Integer part of a number x\
 ## Manual installation notes
 - Place the project folder in **~/.local/share/gnome-shell/extensions**
 - Rename the folder to **pcalc@mgeck64.github.com** so the gnome shell will find it

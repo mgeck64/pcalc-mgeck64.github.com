@@ -5,6 +5,9 @@
 const TOK_UNKNOWN = 0; const TOK_END = 1; const TOK_NUM = 2; const TOK_ADD = 3;
 const TOK_SUB = 4; const TOK_MUL = 5; const TOK_DIV = 6; const TOK_EXP = 7;
 const TOK_LPAREN = 8; const TOK_RPAREN = 9; const TOK_IDENT = 10;
+const TOK_COMMA = 11;
+// if token constant added/removed from above then make sure to update parser.js
+// imports list
 
 const Lexer = class Lexer {
   constructor (expr) { // expr: expression string
@@ -78,6 +81,8 @@ const Lexer = class Lexer {
         id = TOK_LPAREN; break;
       case ')':
         id = TOK_RPAREN; break;
+      case ',':
+        id = TOK_COMMA; break;
     }
     ++this._idx;
     return { id: id, val: null };

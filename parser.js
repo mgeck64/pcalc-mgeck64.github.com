@@ -4,7 +4,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const Lexer = Me.imports.lexer.Lexer;
 const {
   TOK_UNKNOWN, TOK_END, TOK_NUM, TOK_ADD, TOK_SUB, TOK_MUL, TOK_DIV,
-  TOK_EXP = 7, TOK_LPAREN, TOK_RPAREN, TOK_IDENT
+  TOK_EXP = 7, TOK_LPAREN, TOK_RPAREN, TOK_IDENT, TOK_COMMA
 } = Me.imports.lexer;
 
 // Parser-----------------------------------------------------------------------
@@ -123,10 +123,26 @@ const Parser = class Parser {
     }
   }
 
+  _binaryGroupExpr () {
+    if (this._lexer.getToken().id !== TOK_LPAREN) {
+      throw new SyntaxError();
+    }
+    const arg1 = this._expression();
+    if (this._lexer.getToken().id !== TOK_COMMA) {
+      throw new SyntaxError();
+    }
+    const arg2 = this._expression();
+    if (this._lexer.getToken().id !== TOK_RPAREN) {
+      throw new SyntaxError();
+    }
+    return { arg1, arg2 };
+  }
+
   _identExpr () {
     // <_identExpr> ::= "pi" | "e" | "last" | <function call>
-    // <function call> ::= <unary fn ident> <_groupExpr>
-    //                   | <nullary fn ident> <_emptyGroupExpr>
+    // <function call> ::= <nullary fn ident> <_emptyGroupExpr>
+    //                   | <unary fn ident> <_groupExpr>
+    //                   | <binary fn ident> <_binaryGroupExpr>
     const token = this._lexer.getToken();
     if (token.id !== TOK_IDENT) {
       throw new SyntaxError();
@@ -151,6 +167,10 @@ const Parser = class Parser {
         return Math.asinh(this._groupExpr());
       case 'atan':
         return Math.atan(this._groupExpr());
+      case 'atan2': {
+        const args = this._binaryGroupExpr();
+        return Math.atan2(args.arg1, args.arg2);
+      }
       case 'atanh':
         return Math.atanh(this._groupExpr());
       case 'cbrt':
