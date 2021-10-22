@@ -56,3 +56,9 @@ The following special values and functions are available:\
 &nbsp;&nbsp;&nbsp;&nbsp;trunc(x) : integer part of a number x\
 &nbsp;&nbsp;&nbsp;&nbsp;tanh(x) : hyperbolic tangent of a number\
 &nbsp;&nbsp;&nbsp;&nbsp;trunc(x) : integer part of a number x
+## Manual installation notes
+- Place the project folder in **~/.local/share/gnome-shell/extensions**
+- Rename the folder to **pcalc@mgeck64.github.com** so the gnome shell will find it
+- **cd** to the folder and run **make** (or **make all**) from there
+- Reset the gnome shell (if on X11 then press **Alt-F2** and then submit the
+    **r** command; else if under Wayland then log out and log back in)
