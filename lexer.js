@@ -95,7 +95,7 @@ const Lexer = class Lexer {
     const decimalPattern = /[0-9]/;
     let digitPattern = decimalPattern;
 
-    // number begins with radix prefix (0b, 0o, 0x), digit or decimal point
+    // number begins with radix prefix (0b, 0o, 0x), decimal digit or decimal point
     const subLen = this._exprLen - this._idx;
     if (subLen >= 2 && this._expr[idx2] === '0' && /[bB]/.test(this._expr[idx2 + 1])) {
       digitPattern = /[01]/;
