@@ -59,5 +59,6 @@ The following special values and functions are available:\
 - Place the project folder in **~/.local/share/gnome-shell/extensions**
 - Rename the folder to **pcalc<span>@</span>mgeck64.github.com** so the gnome shell will find it
 - **cd** to the folder and run **make** (or **make all**) from there
+- Makefile and .gitignore can be deleted
 - Reset the gnome shell (if under X11 then press **Alt-F2** and then submit the
     **r** command; else if under Wayland then log out and log back in)
