@@ -1,6 +1,6 @@
 {
     "name" : "Panel Calculator",
-    "description" : "A text-based calculator on the gnome panel, out of the way of your work.",
+    "description" : "A text-based calculator that lives on the gnome panel, out of the way of your work.",
     "shell-version" : [
         "3.36", "40"
     ],
