@@ -2,9 +2,9 @@
     "name" : "Panel Calculator",
     "description" : "A text-based calculator that lives on the gnome panel, out of the way of your work.",
     "shell-version" : [
-        "3.36", "40"
+        "3.36", "3.38", "40"
     ],
     "url" : "https://github.com/mgeck64/pcalc-mgeck64.github.com",
     "uuid" : "pcalc@mgeck64.github.com",
-    "version" : 1.0
+    "version" : 3
 }
