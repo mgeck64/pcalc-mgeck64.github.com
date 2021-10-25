@@ -28,7 +28,7 @@ Supported operators:\
 Use parentheses to override operator precedence; e.g.,
 (2+4)*8 means add 2 to 4 and multiply the result by 8.
 
-Numbers can have the 0b, 0o or 0x prefix, or can be
+Numbers can have a 0b, 0o or 0x prefix, or can be
 specified in exponentiation notation; e.g., 0b11011001,
 0o331, 0xd9 and 2.17e+2 all specify the number 217.
 
