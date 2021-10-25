@@ -122,11 +122,6 @@ class _Calculator extends PanelMenu.Button {
 
     this._exprEntry2.clutter_text.connect('button-release-event', this._onButtonReleaseEntry.bind(this));
     this._exprEntry2.clutter_text.connect('activate', this._onActivateEntry.bind(this));
-
-    this._exprEntry2.clutter_text.connect('key_focus_out', function () { // (not necessary for _exprEntry)
-      const endIdx = actor.get_text().length;
-      actor.set_selection(endIdx, endIdx); // clear selection, put cursor at end so it will be there when re-focused
-    }.bind(this));
   }
 
   _onButtonReleaseEntry (actor, event) {
