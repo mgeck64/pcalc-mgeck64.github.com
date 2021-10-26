@@ -213,6 +213,8 @@ const Parser = class Parser {
       case 'sqrt':
         return Math.sqrt(this._groupExpr());
       case 'tan':
+        return Math.tan(this._groupExpr());
+      case 'tanh':
         return Math.tanh(this._groupExpr());
       case 'trunc':
         return Math.trunc(this._groupExpr());
