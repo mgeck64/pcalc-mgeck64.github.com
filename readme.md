@@ -60,9 +60,9 @@ The following special values and functions are available:\
 &nbsp;&nbsp;&nbsp;&nbsp;tanh(x) : Hyperbolic tangent of a number\
 &nbsp;&nbsp;&nbsp;&nbsp;trunc(x) : Integer part of a number x
 ## Manual installation notes
-- Place the project folder in **~/.local/share/gnome-shell/extensions**
+- Run **make** (or **make all**) from the project folder to compile the schema
+- Place the folder in **~/.local/share/gnome-shell/extensions**
 - Rename the folder to **pcalc<span>@</span>mgeck64.github.com** so the gnome shell will find it
-- **cd** to the folder and run **make** (or **make all**) from there
-- Makefile and .gitignore can be deleted (optional)
+- Makefile, .gitignore and this file can be deleted (optional)
 - Reset the gnome shell (if under X11 then press **Alt-F2** and then submit the
     **r** command; else if under Wayland then log out and log back in)
