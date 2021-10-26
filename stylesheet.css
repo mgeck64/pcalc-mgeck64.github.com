@@ -1,8 +1,18 @@
-.expr-entry {
+.pcalc-expr-entry {
     padding-top: 0;
     padding-bottom: 0;
 }
 
-.expr-entry2 {
+.pcalc-expr-entry2-with-help {
     font-size: 120%;
+    width: 360px;
+}
+
+.pcalc-expr-entry2-no-help {
+    font-size: 120%;
+}
+
+.pcalc-help-text {
+    color: #e95420;
+    /*a color that looks OK on dark or light background*/
 }

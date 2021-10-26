@@ -9,8 +9,6 @@ const {NoExpression, UndefinedIdent, CantConvertNumber, Parser} = Me.imports.par
 // Calculator-------------------------------------------------------------------
 // (calculator user interface)
 
-const MENU_ITEM_WIDTH = 400;
-
 class _Calculator extends PanelMenu.Button {
   _init () {
     super._init(0, 'Calculator', false);
@@ -43,7 +41,7 @@ class _Calculator extends PanelMenu.Button {
       track_hover: true,
       can_focus: true,
       y_align: Clutter.ActorAlign.CENTER,
-      style_class: 'expr-entry'
+      style_class: 'pcalc-expr-entry'
     });
 
     this._settings.bind(
@@ -59,29 +57,27 @@ class _Calculator extends PanelMenu.Button {
       hint_text: 'Enter a mathematical expression',
       track_hover: true,
       can_focus: true,
-      width: MENU_ITEM_WIDTH,
-      style_class: 'expr-entry2'
+      style_class: this._exprEntry2StyleClass(),
     });
     const menuItem = new PopupMenu.PopupBaseMenuItem({
       reactive: false
     });
-    menuItem.actor.add_actor(this._exprEntry2);
+    menuItem.add_actor(this._exprEntry2);
     this.menu.addMenuItem(menuItem);
 
     this._addSubmenuHelp('General Help', this._generalHelpText)
-    this._addSubmenuHelp('Special Values and Functions, Part 1', this._specialValuesAndFunctionsText1)
-    this._addSubmenuHelp('Special Values and Functions, Part 2', this._specialValuesAndFunctionsText2)
+    this._addSubmenuHelp('Special Values and Functions', this._specialValuesAndFunctionsText)
   }
 
   _addSubmenuHelp(title, helpTextFn) {
     const label = new St.Label({
       text: helpTextFn(),
-      width: MENU_ITEM_WIDTH,
+      style_class: 'pcalc-help-text'
     });
     const subMenuBaseItem = new PopupMenu.PopupBaseMenuItem({
       reactive: false
     });
-    subMenuBaseItem.actor.add_actor(label);
+    subMenuBaseItem.add_actor(label);
     const subMenuItem = new PopupMenu.PopupSubMenuMenuItem(title, true);
     subMenuItem.menu.addMenuItem(subMenuBaseItem);
     this.menu.addMenuItem(subMenuItem);
@@ -107,7 +103,7 @@ class _Calculator extends PanelMenu.Button {
     const calcBox = new St.BoxLayout();
     calcBox.add(this._exprEntry);
     calcBox.add(this._icon);
-    this.actor.add_actor(calcBox);
+    this.add_actor(calcBox);
   }
 
   _initEvents () { // events:
@@ -159,14 +155,20 @@ class _Calculator extends PanelMenu.Button {
     return 'accessories-calculator-symbolic';
   }
 
+  _exprEntry2StyleClass () {
+    return this._settings.get_boolean('show-help-on-popup')
+      ? 'pcalc-expr-entry2-with-help' : 'pcalc-expr-entry2-no-help';
+  }
+
   _settingsChanged () {
     this._icon.icon_name = this._iconName();
+    this._exprEntry2.style_class = this._exprEntry2StyleClass();
   }
 
   _generalHelpText () {
     return '\
-An example of an expression is 2+4*8, which means multiply\n\
-4 by 8 and add 2 to the result.\n\
+An example of an expression is 2+4*8, which means\n\
+multiply 4 by 8 and add 2 to the result.\n\
 \n\
 Supported operators:\n\
     + addition\n\
@@ -178,12 +180,12 @@ Supported operators:\n\
 Use parentheses to override operator precedence; e.g.,\n\
 (2+4)*8 means add 2 to 4 and multiply the result by 8.\n\
 \n\
-Numbers can have the 0b, 0o or 0x prefix, or can be\n\
+Numbers can have a 0b, 0o or 0x prefix, or can be\n\
 specified in exponentiation notation; e.g., 0b11011001,\n\
 0o331, 0xd9 and 2.17e+2 all specify the number 217.';
   }
 
-  _specialValuesAndFunctionsText1 () {
+  _specialValuesAndFunctionsText () {
     return '\
 pi : Did you know that March 14 is Pi day?\n\
 e : Euler\'s number\n\
@@ -197,11 +199,7 @@ atan(x) : Arctangent of x between -pi and pi radians\n\
 atan2(y, x) : Arctangent of the quotient of its arguments\n\
 atanh(x) : Hyperbolic arctangent of x\n\
 cbrt(x) : Cubic root of x\n\
-ceil(x) : x rounded upwards to the nearest integer';
-  }
-
-  _specialValuesAndFunctionsText2 () {
-    return '\
+ceil(x) : x rounded upwards to the nearest integer\n\
 cos(x) : Cosine of x (x is in radians)\n\
 cosh(x) : Hyperbolic cosine of x\n\
 exp(x) : Value of e raised to the power of x\n\
