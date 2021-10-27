@@ -1,9 +1,9 @@
 // this is a customized version of the GNOME shell source file shellEntry.js:
-// 1) password stuff was removed; 2) CapsLockWarning was removed; 3) copy copies
-// all if there is no selection; this is useful behavior for the calculator but
-// also works around odd behavior in St.Entry where it clears the selection on
-// button-press-event, thus indicating nothing to copy; (normal behavior is to
-// clear the selection on button down event)
+// copy copies all if there is no selection; this is useful behavior for the
+// calculator but also works around odd behavior in St.Entry where it clears the
+// selection on button-press-event, thus indicating nothing to copy. (normal
+// behavior is to clear the selection on button down event.) also, password
+// stuff and CapsLockWarning were removed
 
 // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
 /* exported AuthPrompt */
