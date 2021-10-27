@@ -5,6 +5,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 
 const Me = ExtensionUtils.getCurrentExtension();
 const {NoExpression, UndefinedIdent, CantConvertNumber, Parser} = Me.imports.parser;
+const EntryMenu = Me.imports.entryMenu;
 
 // Calculator-------------------------------------------------------------------
 // (calculator user interface)
@@ -44,6 +45,8 @@ class _Calculator extends PanelMenu.Button {
       style_class: 'pcalc-expr-entry'
     });
 
+    EntryMenu.addContextMenu(this._exprEntry);
+
     this._settings.bind(
       'allow-entry-on-panel',
       this._exprEntry,
@@ -52,15 +55,18 @@ class _Calculator extends PanelMenu.Button {
     );
   }
 
-  _initPopup () { // popup will have secondary expression entry field and help content
+_initPopup () { // popup will have secondary expression entry field and help content
     this._exprEntry2 = new St.Entry({
       hint_text: 'Enter a mathematical expression',
       track_hover: true,
       can_focus: true,
       style_class: this._exprEntry2StyleClass(),
     });
+
+    EntryMenu.addContextMenu(this._exprEntry2);
+
     const menuItem = new PopupMenu.PopupBaseMenuItem({
-      reactive: false
+      reactive: false,
     });
     menuItem.add_actor(this._exprEntry2);
     this.menu.addMenuItem(menuItem);
@@ -74,9 +80,11 @@ class _Calculator extends PanelMenu.Button {
       text: helpTextFn(),
       style_class: 'pcalc-help-text'
     });
+
     const subMenuBaseItem = new PopupMenu.PopupBaseMenuItem({
       reactive: false
     });
+    
     subMenuBaseItem.add_actor(label);
     const subMenuItem = new PopupMenu.PopupSubMenuMenuItem(title, true);
     subMenuItem.menu.addMenuItem(subMenuBaseItem);
