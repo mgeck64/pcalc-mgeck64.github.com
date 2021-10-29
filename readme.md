@@ -19,17 +19,17 @@ An example of an expression is 2+4*8, which means multiply 4 by 8 and add 2 to
 the result.
 
 Supported operators:\
-&nbsp;&nbsp;&nbsp;&nbsp;+ addition\
-&nbsp;&nbsp;&nbsp;&nbsp;- subtraction and negation\
-&nbsp;&nbsp;&nbsp;&nbsp;* multiplication\
-&nbsp;&nbsp;&nbsp;&nbsp;/ division\
-&nbsp;&nbsp;&nbsp;&nbsp;^ or ** exponentiation (right-associative)
+&nbsp;&nbsp;&nbsp;&nbsp;+ for addition\
+&nbsp;&nbsp;&nbsp;&nbsp;- for subtraction and negation\
+&nbsp;&nbsp;&nbsp;&nbsp;* for multiplication\
+&nbsp;&nbsp;&nbsp;&nbsp;/ for division\
+&nbsp;&nbsp;&nbsp;&nbsp;^ or ** for exponentiation (right-associative)
 
 Use parentheses to override operator precedence; e.g.,
 (2+4)*8 means add 2 to 4 and multiply the result by 8.
 
 Numbers can have a 0b, 0o or 0x prefix, or can be
-specified in exponentiation notation; e.g., 0b11011001,
+specified in scientific E notation; e.g., 0b11011001,
 0o331, 0xd9 and 2.17e+2 all specify the number 217.
 
 The following special values and functions are available:\
